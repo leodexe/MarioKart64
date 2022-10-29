@@ -9,6 +9,11 @@ include "..\LIB\macros.inc"
 origin 0x0
 insert "..\LIB\Mario Kart 64 (U) [!].z64"
 
+// change ROM name
+origin  0x20
+db  "MK64 NETPLAY"
+fill 0x34 - origin(), 0x20
+
 constant ModeSelection(0x800DC53C)
 constant CourseSelection1(0x800DC5A0)
 constant CupSelection(0x8018EE09)
@@ -43,19 +48,21 @@ scope Init: {
     nop
   Menu:
     la t0, Options
-    addiu t1, t0, 0x10 // 15 menu options
+    addiu t1, t0, 0x14 // 19 menu Options
     li t2, 0x01010101
     Loop:
-      sw t2, 0 (t0) // Initialize cursor and options with 0x01
+      sw t2, 0 (t0) // Initialize cursor and Options with 0x01
       addiu t0, 0x04
       bne t0, t1, Loop
       nop
     Default:
       la t0, Options
       ori t1, r0, 0x02
-      sb t1, 8 (t0) // Versus Tracks
-      sb t1, 12 (t0) // Character Stats
-      sb t1, 13 (t0) // Versus Scores
+      sb t1, 1 (t0) // Character Stats
+      sb t1, 7 (t0) // Multiplayer Music
+      sb t1, 10 (t0) // Versus Bomb Karts
+      sb t1, 11 (t0) // Versus Tracks
+      sb t1, 15 (t0) // Versus Scores
   lw ra, 0x14 (sp)
   jr ra
   addiu sp, 0x18
@@ -67,7 +74,7 @@ scope Init: {
 // 00000000                             Pointer to entry string
 // 00000000 00000000 00000000 00000000  Pointers to settings strings
 MenuStrings:
-dd 0x00000002 // Tracks
+dd 0x00000002 // Character Stats
 dd MenuEntry1
 dd MenuEntry1Setting1, MenuEntry1Setting2, 0x00000000
 
@@ -75,60 +82,72 @@ dd 0x00000003 // Scaling
 dd MenuEntry2
 dd MenuEntry2Setting1, MenuEntry2Setting2, MenuEntry2Setting3, 0x00000000
 
-dd 0x00000002 // Widescreen
+dd 0x00000002 // Emulator Lag Fix
 dd MenuEntry3
 dd MenuEntry3Setting1, MenuEntry3Setting2, 0x00000000
 
-dd 0x00000002 // Trophies
+dd 0x00000002 // Tracks
 dd MenuEntry4
 dd MenuEntry4Setting1, MenuEntry4Setting2, 0x00000000
 
-dd 0x00000002 // Multiplayer Music
+dd 0x00000002 // Widescreen
 dd MenuEntry5
 dd MenuEntry5Setting1, MenuEntry5Setting2, 0x00000000
 
-dd 0x00000002 // Multiplayer KD Train
+dd 0x00000002 // Trophies
 dd MenuEntry6
 dd MenuEntry6Setting1, MenuEntry6Setting2, 0x00000000
 
-dd 0x00000002 // Multiplayer DKJP Boat
+dd 0x00000002 // Multiplayer Music
 dd MenuEntry7
 dd MenuEntry7Setting1, MenuEntry7Setting2, 0x00000000
 
-dd 0x00000002 // Versus Tracks
+dd 0x00000002 // Multiplayer KD Train
 dd MenuEntry8
 dd MenuEntry8Setting1, MenuEntry8Setting2, 0x00000000
 
-dd 0x00000002 // Versus Timer
+dd 0x00000002 // Multiplayer DKJP Boat
 dd MenuEntry9
 dd MenuEntry9Setting1, MenuEntry9Setting2, 0x00000000
 
-dd 0x00000003 // Gold Mushroom
+dd 0x00000002 // Versus Bomb Karts
 dd MenuEntry10
-dd MenuEntry10Setting1, MenuEntry10Setting2, MenuEntry10Setting3, 0x00000000
+dd MenuEntry10Setting1, MenuEntry10Setting2, 0x00000000
 
-dd 0x00000009 // Items
+dd 0x00000002 // Versus Tracks
 dd MenuEntry11
-dd MenuEntry11Setting1, MenuEntry11Setting2, MenuEntry11Setting3, MenuEntry11Setting4
-dd MenuEntry11Setting5, MenuEntry11Setting6, MenuEntry11Setting7, MenuEntry11Setting8
-dd MenuEntry11Setting9, 0x00000000
+dd MenuEntry11Setting1, MenuEntry11Setting2, 0x00000000
 
-dd 0x00000002 // Character Stats
+dd 0x00000002 // Versus Timer
 dd MenuEntry12
 dd MenuEntry12Setting1, MenuEntry12Setting2, 0x00000000
 
-dd 0x00000002 // Versus Scores
+dd 0x00000003 // Gold Mushroom
 dd MenuEntry13
-dd MenuEntry13Setting1, MenuEntry13Setting2, 0x00000000
+dd MenuEntry13Setting1, MenuEntry13Setting2, MenuEntry13Setting3, 0x00000000
+
+dd 0x00000009 // Items
+dd MenuEntry14
+dd MenuEntry14Setting1, MenuEntry14Setting2, MenuEntry14Setting3, MenuEntry14Setting4
+dd MenuEntry14Setting5, MenuEntry14Setting6, MenuEntry14Setting7, MenuEntry14Setting8
+dd MenuEntry14Setting9, 0x00000000
+
+dd 0x00000002 // Versus Scores
+dd MenuEntry15
+dd MenuEntry15Setting1, MenuEntry15Setting2, 0x00000000
+
+dd 0x00000002 // Polling Rate Fix
+dd MenuEntry16
+dd MenuEntry16Setting1, MenuEntry16Setting2, 0x00000000
 
 dd 0x00000000, 0x00000000
 
 MenuEntry1:
-Asciiz("tracks")
+Asciiz("stats")
 MenuEntry1Setting1:
 Asciiz("default")
 MenuEntry1Setting2:
-Asciiz("random")
+Asciiz("all yoshi")
 
 MenuEntry2:
 Asciiz("scaling")
@@ -140,100 +159,128 @@ MenuEntry2Setting3:
 Asciiz("60 fps")
 
 MenuEntry3:
-Asciiz("widescreen")
+Asciiz("lag fix")
 MenuEntry3Setting1:
 Asciiz("default")
 MenuEntry3Setting2:
 Asciiz("enabled")
 
 MenuEntry4:
-Asciiz("trophies")
+Asciiz("tracks")
 MenuEntry4Setting1:
 Asciiz("default")
 MenuEntry4Setting2:
-Asciiz("skip")
+Asciiz("random")
 
 MenuEntry5:
-Asciiz("mp music")
+Asciiz("widescreen")
 MenuEntry5Setting1:
 Asciiz("default")
 MenuEntry5Setting2:
 Asciiz("enabled")
 
 MenuEntry6:
-Asciiz("mp train")
+Asciiz("trophies")
 MenuEntry6Setting1:
 Asciiz("default")
 MenuEntry6Setting2:
-Asciiz("full")
+Asciiz("skip")
 
 MenuEntry7:
-Asciiz("mp boat")
+Asciiz("mp music")
 MenuEntry7Setting1:
 Asciiz("default")
 MenuEntry7Setting2:
 Asciiz("enabled")
 
 MenuEntry8:
-Asciiz("vs tracks")
+Asciiz("mp train")
 MenuEntry8Setting1:
 Asciiz("default")
 MenuEntry8Setting2:
-Asciiz("all cups")
+Asciiz("full")
 
 MenuEntry9:
-Asciiz("vs timer")
+Asciiz("mp boat")
 MenuEntry9Setting1:
 Asciiz("default")
 MenuEntry9Setting2:
 Asciiz("enabled")
 
 MenuEntry10:
-Asciiz("gold shroom")
+Asciiz("vs bombs")
 MenuEntry10Setting1:
 Asciiz("default")
 MenuEntry10Setting2:
-Asciiz("feather small")
-MenuEntry10Setting3:
-Asciiz("feather big")
+Asciiz("disabled")
 
 MenuEntry11:
-Asciiz("items")
+Asciiz("vs tracks")
 MenuEntry11Setting1:
 Asciiz("default")
 MenuEntry11Setting2:
-Asciiz("player 1")
-MenuEntry11Setting3:
-Asciiz("player 2")
-MenuEntry11Setting4:
-Asciiz("player 3")
-MenuEntry11Setting5:
-Asciiz("player 4")
-MenuEntry11Setting6:
-Asciiz("player 5")
-MenuEntry11Setting7:
-Asciiz("player 6")
-MenuEntry11Setting8:
-Asciiz("player 7")
-MenuEntry11Setting9:
-Asciiz("player 8")
+Asciiz("all cups")
 
 MenuEntry12:
-Asciiz("stats")
+Asciiz("vs 2p timer")
 MenuEntry12Setting1:
 Asciiz("default")
 MenuEntry12Setting2:
-Asciiz("all yoshi")
+Asciiz("enabled")
 
 MenuEntry13:
-Asciiz("vs scores")
+Asciiz("gold shroom")
 MenuEntry13Setting1:
 Asciiz("default")
 MenuEntry13Setting2:
+Asciiz("feather small")
+MenuEntry13Setting3:
+Asciiz("feather big")
+
+MenuEntry14:
+Asciiz("items")
+MenuEntry14Setting1:
+Asciiz("default")
+MenuEntry14Setting2:
+Asciiz("player 1")
+MenuEntry14Setting3:
+Asciiz("player 2")
+MenuEntry14Setting4:
+Asciiz("player 3")
+MenuEntry14Setting5:
+Asciiz("player 4")
+MenuEntry14Setting6:
+Asciiz("player 5")
+MenuEntry14Setting7:
+Asciiz("player 6")
+MenuEntry14Setting8:
+Asciiz("player 7")
+MenuEntry14Setting9:
+Asciiz("player 8")
+
+MenuEntry15:
+Asciiz("vs scores")
+MenuEntry15Setting1:
+Asciiz("default")
+MenuEntry15Setting2:
 Asciiz("enabled")
+
+MenuEntry16:
+Asciiz("polling")
+MenuEntry16Setting1:
+Asciiz("default")
+MenuEntry16Setting2:
+Asciiz("30hz")
 
 TitleString:
 Asciiz("abitalive  weatherton  abney  sully")
+
+NetplayString:
+Asciiz("fray+veliz emulator/console build")
+
+while (pc() % 0x4) { // Align
+  db 0x00
+}
 
 fill 0x800040C0 - pc() // Zero fill remainder of resource display function
 
@@ -257,9 +304,14 @@ Title:
   la a2, TitleString
   jal DebugPrintStringCoord
   nop
+  ori a0, r0, 0x00
+  ori a1, r0, 0x08
+  la a2, NetplayString
+  jal DebugPrintStringCoord
+  nop
 la t0, MenuStrings // Array start
 addiu t1, r0, 0x01 // Entry number
-addiu a1, r0, 0x50 // Y coordinate
+addiu a1, r0, 0x38 // Y coordinate
 MenuArrayLoop:
   lw t2, 0x04 (t0) // Entry character string
   beq t2, r0, MenuInput
@@ -416,32 +468,40 @@ scope SameCharacter: {
     nop
 }
 
-// Random Tracks
-scope RandomTracks: {
+// Character Stats
+// Runs once before a race
+// Available registers: all
+scope CharacterStats: {
+  addiu sp, -0x18
+  sw ra, 0x14 (sp)
+  jal 0x800010CC // Original instruction
+  nop
   LuiLb(t0, Options+1)
-  OriBeq(t0, 0x01, t1, End) // Skip if option disabled
-  LuiLw(t0, ModeSelection) // Determine the current mode
-  Versus:
-    OriBne(t0, 0x02, t1, Battle) // If mode == Versus
-    jal RandomInt // Call random function with range 0x00-0x10
-    ori a0, r0, 0x10
-    OriBne(v0, 0x0F, t1, Store) // Store the returned value if != 0x0F (BF)
-    ori v0, r0, 0x12 // Swap 0x0F (BF) with 0x12 (DKJP)
-    b Store
+  Disabled:
+    OriBne(t0, 0x01, t1, Yoshi) // If option disabled
+    la a0, 0x800E2360 // Destination
+    li a1, 0x0E2F60 // Source
+    li a2, 0x14B0 // Size
+    jal DmaCopy // DMA copy default stats
     nop
-  Battle:
-    OriBne(t0, 0x03, t1, End) // Else if mode == Battle
-    jal RandomInt // Call random function with range 0x00-0x03
-    ori a0, r0, 0x04
-    addiu v0, 0x10 // Add 0x10 to the returned value
-    OriBne(v0, 0x12, t1, Store) // Store the result if != 0x12 (DKJP)
-    ori v0, r0, 0x0F // Swap 0x12 (DKJP) with 0x0F (BF)
-  Store:
-    LuiSh(v0, CourseSelection1, t0)
+    b End
+    nop
+  Yoshi:
+    OriBne(t0, 0x02, t1, End) // Else if option set to all Yoshi
+    li a0, YoshiMain // Source
+    la a1, 0x800E2360 // Destination
+    li a2, 0x14B0 // Size
+    jal BCopy // Copy Yoshi main stats
+    nop
+    li a0, YoshiWeight // Source
+    la a1, 0x802B8790 // Destination
+    li a2, 0x20 // Size
+    jal BCopy // Copy Yoshi weight stats
+    nop
   End:
     lw ra, 0x14 (sp)
     jr ra
-    addiu sp, 0x28
+    addiu sp, 0x18
 }
 
 // Scaling Fix
@@ -525,9 +585,119 @@ scope ScalingFixPost: { // Available registers: t7, at
     nop
 }
 
+scope Scaling60FpsFix1: { // Available registers: t6, at
+  addiu sp, -0x18
+  sw ra, 0x14 (sp)
+  LuiLb(t6, Options+2)
+  Disabled:
+    OriBne(t6, 0x01, at, Fps30) // If option disabled
+    addiu a2, r0, 0x0001 // Original instruction
+    b End
+    nop
+  Fps30:
+    OriBne(t6, 0x02, at, Fps60) // Else if option set to 30 fps
+    addiu a2, r0, 0x0001 // Original instruction
+    b End
+    nop
+  Fps60:
+    OriBne(t6, 0x03, at, End) // Else if option set to 60 fps
+    or a2, r0, r0 // Return 0
+  End:
+    jal 0x800CD750 // Original instruction
+    nop
+    lw ra, 0x14 (sp)
+    jr ra
+    addiu sp, 0x18
+}
+
+scope Scaling60FpsFix2: { // Available registers: t3, t1
+  LuiLb(t3, Options+2)
+  Disabled:
+    OriBne(t3, 0x01, t1, Fps30) // If option disabled
+    addiu t1, r0, 0x0002 // Original instruction
+    b End
+    nop
+  Fps30:
+    OriBne(t3, 0x02, t1, Fps60) // Else if option set to 30 fps
+    addiu t1, r0, 0x0002 // Original instruction
+    b End
+    nop
+  Fps60:
+    OriBne(t3, 0x03, t1, End) // Else if option set to 60 fps
+    addiu t1, r0, 0x0001 // Return 1
+  End:
+    jr ra
+    nop
+}
+
+scope PollingFix: {
+  LuiLb(t0, Options+16)
+  Disabled:
+    OriBne(t0, 0x01, at, Enabled) // If option disabled
+    b End
+    nop
+  Enabled:
+    OriBne(t0, 0x02, at, End) // If option enabled
+    LuiLb(t0, Options+2)
+    FpsDisabled:
+        OriBne(t0, 0x01, at, Fps30) // If scaling disabled
+        b End
+        nop
+    Fps30:
+        OriBne(t0, 0x02, at, Fps60) // Else if scaling set to 30 fps
+        b End
+        nop
+    Fps60:
+        OriBne(t0, 0x03, at, End) // Else if scaling set to 60 fps
+        li t0, Flag
+        lbu at, 0x0003(t0)
+        xori at, at, 0x0001
+        bnez at, End // Branch on every second iteration
+        sb at, 0x0003(t0)
+        j 0x80000A50 // Skip input polling
+        nop
+  End:
+    jal 0x800CD4F0 // Original instruction
+    nop
+    j 0x80000A3C
+    nop
+    
+  Flag:
+  fill 0x4
+}
+
+
+// Random Tracks
+scope RandomTracks: {
+  LuiLb(t0, Options+4)
+  OriBeq(t0, 0x01, t1, End) // Skip if option disabled
+  LuiLw(t0, ModeSelection) // Determine the current mode
+  Versus:
+    OriBne(t0, 0x02, t1, Battle) // If mode == Versus
+    jal RandomInt // Call random function with range 0x00-0x10
+    ori a0, r0, 0x10
+    OriBne(v0, 0x0F, t1, Store) // Store the returned value if != 0x0F (BF)
+    ori v0, r0, 0x12 // Swap 0x0F (BF) with 0x12 (DKJP)
+    b Store
+    nop
+  Battle:
+    OriBne(t0, 0x03, t1, End) // Else if mode == Battle
+    jal RandomInt // Call random function with range 0x00-0x03
+    ori a0, r0, 0x04
+    addiu v0, 0x10 // Add 0x10 to the returned value
+    OriBne(v0, 0x12, t1, Store) // Store the result if != 0x12 (DKJP)
+    ori v0, r0, 0x0F // Swap 0x12 (DKJP) with 0x0F (BF)
+  Store:
+    LuiSh(v0, CourseSelection1, t0)
+  End:
+    lw ra, 0x14 (sp)
+    jr ra
+    addiu sp, 0x28
+}
+
 // Widescreen
 scope Widescreen: {
-  LuiLb(t0, Options+3)
+  LuiLb(t0, Options+5)
   Disabled:
     OriBne(t0, 0x01, t1, Enabled) // If option disabled
     LuiLw(a3, 0x80150148) // Original instruction
@@ -556,7 +726,7 @@ scope Widescreen: {
 
 // Skip Trophy Ceremony
 scope SkipTrophy: {
-  LuiLb(t0, Options+4)
+  LuiLb(t0, Options+6)
   Disabled:
     OriBne(t0, 0x01, t1, Enabled) // If option disabled
     addiu t7, r0, 0x05 // Original instruction
@@ -572,7 +742,7 @@ scope SkipTrophy: {
 
 // Multiplayer Music
 scope MultiplayerMusic: {
-  LuiLb(t0, Options+5)
+  LuiLb(t0, Options+7)
   Disabled:
     OriBne(t0, 0x01, t1, Enabled) // If option disabled
     LuiLw(t6, 0x800DC530) // Original instructions
@@ -587,7 +757,7 @@ scope MultiplayerMusic: {
 }
 
 scope MultiplayerMusicL: { // Available registers: t0, at
-  LuiLb(t0, Options+5)
+  LuiLb(t0, Options+7)
   Disabled:
     OriBne(t0, 0x01, at, Enabled) // If option disabled
     LuiLw(t1, 0x800DC52C) // Original instructions
@@ -603,7 +773,7 @@ scope MultiplayerMusicL: { // Available registers: t0, at
 
 // Multiplayer KD Train
 scope MultiplayerTrain: { // Available registers: t5, a2
-  LuiLb(t5, Options+6)
+  LuiLb(t5, Options+8)
   Disabled:
     OriBne(t5, 0x01, a2, Enabled) // If option disabled
     LuiLw(v0, 0x800DC530) // Original instructions
@@ -619,7 +789,7 @@ scope MultiplayerTrain: { // Available registers: t5, a2
 
 // Multiplayer DKJP Boat
 scope MultiplayerBoat: { // Available registers: at, a0
-  LuiLb(at, Options+7)
+  LuiLb(at, Options+9)
   Disabled:
     OriBne(at, 0x01, a0, Enabled) // If option disabled
     lb t7, 0 (t2) // Original instruction
@@ -633,13 +803,29 @@ scope MultiplayerBoat: { // Available registers: at, a0
     nop
 }
 
+// Versus Bomb Karts
+scope VersusBomb: { // Available registers: t5, t6
+  LuiLb(t5, Options+10)
+  Enabled:
+    OriBne(t5, 0x01, t6, Disabled) // If option enabled
+    addiu at, r0, 0x0002 // Original instruction
+    b End
+    nop
+  Disabled:
+    OriBne(t5, 0x02, t6, End) // Else if option disabled
+    addiu at, r0, 0x0005 // Return 5
+  End:
+    jr ra
+    nop
+}
+
 // Versus All Cups
 scope VersusAllCups: { // Available registers: all
   addiu sp, -0x18
   sw ra, 0x14 (sp)
   jal 0x80290388 // Original instruction
   nop
-  LuiLb(t0, Options+8)
+  LuiLb(t0, Options+11)
   OriBeq(t0, 0x01, t1, End) // Skip if option disabled
   LuiLw(t0, ModeSelection)
   OriBne(t0, 0x02, t1, End) // Skip if mode != Versus
@@ -671,7 +857,7 @@ scope VersusAllCups: { // Available registers: all
 
 // Versus Timer
 scope VersusTimer: { // Available registers: all
-  LuiLb(t0, Options+9)
+  LuiLb(t0, Options+12)
   Disabled:
     OriBne(t0, 0x01, t1, Enabled) // If option disabled
     LuiLw(v0, ModeSelection) // Original instructions
@@ -696,7 +882,7 @@ scope VersusTimer: { // Available registers: all
 // Available registers: all except t7
 // Returns: t8
 scope GoldMushroom: {
-  LuiLb(t0, Options+10)
+  LuiLb(t0, Options+13)
   Disabled:
     OriBne(t0, 0x01, t1, FeatherSmall) // If option disabled
     ori t8, t7, 0x0200 // Original instruction
@@ -723,7 +909,7 @@ scope GoldMushroom: {
 scope PlayerItems: {
   addiu sp, -0x18
   sw ra, 0x14 (sp)
-  LuiLb(t0, Options+11)
+  LuiLb(t0, Options+14)
   OriBeq(t0, 0x01, t1, End) // Skip if option disabled
   Enabled:
     SltiBeq(t0, 0x0A, t1, End) // If option enabled
@@ -731,42 +917,6 @@ scope PlayerItems: {
   End:
     jal 0x8007ADA8 // Original instruction
     nop
-    lw ra, 0x14 (sp)
-    jr ra
-    addiu sp, 0x18
-}
-
-// Character Stats
-// Runs once before a race
-// Available registers: all
-scope CharacterStats: {
-  addiu sp, -0x18
-  sw ra, 0x14 (sp)
-  jal 0x800010CC // Original instruction
-  nop
-  LuiLb(t0, Options+12)
-  Disabled:
-    OriBne(t0, 0x01, t1, Yoshi) // If option disabled
-    la a0, 0x800E2360 // Destination
-    li a1, 0x0E2F60 // Source
-    li a2, 0x14B0 // Size
-    jal DmaCopy // DMA copy default stats
-    nop
-    b End
-    nop
-  Yoshi:
-    OriBne(t0, 0x02, t1, End) // Else if option set to all Yoshi
-    li a0, YoshiMain // Source
-    la a1, 0x800E2360 // Destination
-    li a2, 0x14B0 // Size
-    jal BCopy // Copy Yoshi main stats
-    nop
-    li a0, YoshiWeight // Source
-    la a1, 0x802B8790 // Destination
-    li a2, 0x20 // Size
-    jal BCopy // Copy Yoshi weight stats
-    nop
-  End:
     lw ra, 0x14 (sp)
     jr ra
     addiu sp, 0x18
@@ -805,7 +955,7 @@ scope VersusScores: {
   sw a2, 0x08 (sp)
   jal 0x800A6E94 // Original instruction
   nop
-  LuiLb(t0, Options+13)
+  LuiLb(t0, Options+15)
   OriBeq(t0, 0x01, t1, End) // Skip if option disabled
   Enabled:
     ori a0, r0, 0x03 // Color = yellow
@@ -898,7 +1048,7 @@ scope IntToAscii: {
 // Available registers: all
 // Returns: s2
 scope VersusAllCupsMenu: {
-  LuiLb(t0, Options+8)
+  LuiLb(t0, Options+11)
   Enabled:
     OriBne(t0, 0x02, t1, Disabled) // If option enabled
     LuiLw(t0, ModeSelection)
@@ -958,7 +1108,7 @@ scope VersusAllCupsMenu: {
 // Runs when an option is selected on the versus and battle results screens
 // Available registers: all
 scope VersusAllCupsMenu2: {
-  LuiLb(t0, Options+8)
+  LuiLb(t0, Options+11)
   Enabled:
     OriBne(t0, 0x02, t1, Disabled) // If option enabled
     LuiLw(t0, ModeSelection)
@@ -1067,6 +1217,20 @@ base 0x80001890
 jal ScalingFixPost
 nop
 
+origin 0x001BDC
+base 0x80000FDC
+jal Scaling60FpsFix1
+nop
+
+origin 0x0020CC
+base 0x800014CC
+jal Scaling60FpsFix2
+
+// Polling Rate Fix
+origin 0x001634
+base 0x80000A34
+j PollingFix
+
 // Widescreen
 origin 0x10E07C
 base 0x802A4A6C
@@ -1144,6 +1308,16 @@ nop
 origin 0x013F4C
 base 0x8001334C
 j MultiplayerBoat
+
+// Versus Bomb Karts
+origin 0x00A458
+base 0x80009858
+jal VersusBomb
+
+origin 0x01D004
+base 0x8001C404
+jal VersusBomb
+lw  t8, 0xC53C(t8)
 
 // Versus All Cups
 origin 0x09DBA4
