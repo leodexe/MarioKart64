@@ -59,10 +59,9 @@ scope Init: {
       la t0, Options
       ori t1, r0, 0x02
       sb t1, 1 (t0) // Character Stats
-      sb t1, 7 (t0) // Multiplayer Music
-      sb t1, 10 (t0) // Versus Bomb Karts
-      sb t1, 11 (t0) // Versus Tracks
-      sb t1, 15 (t0) // Versus Scores
+      sb t1, 6 (t0) // Multiplayer Music
+      sb t1, 10 (t0) // Versus Tracks
+      sb t1, 14 (t0) // Versus Scores
   lw ra, 0x14 (sp)
   jr ra
   addiu sp, 0x18
@@ -82,63 +81,59 @@ dd 0x00000003 // Scaling
 dd MenuEntry2
 dd MenuEntry2Setting1, MenuEntry2Setting2, MenuEntry2Setting3, 0x00000000
 
-dd 0x00000002 // Emulator Lag Fix
+dd 0x00000002 // Tracks
 dd MenuEntry3
 dd MenuEntry3Setting1, MenuEntry3Setting2, 0x00000000
 
-dd 0x00000002 // Tracks
+dd 0x00000002 // Widescreen
 dd MenuEntry4
 dd MenuEntry4Setting1, MenuEntry4Setting2, 0x00000000
 
-dd 0x00000002 // Widescreen
+dd 0x00000002 // Trophies
 dd MenuEntry5
 dd MenuEntry5Setting1, MenuEntry5Setting2, 0x00000000
 
-dd 0x00000002 // Trophies
+dd 0x00000002 // Multiplayer Music
 dd MenuEntry6
 dd MenuEntry6Setting1, MenuEntry6Setting2, 0x00000000
 
-dd 0x00000002 // Multiplayer Music
+dd 0x00000002 // Multiplayer KD Train
 dd MenuEntry7
 dd MenuEntry7Setting1, MenuEntry7Setting2, 0x00000000
 
-dd 0x00000002 // Multiplayer KD Train
+dd 0x00000002 // Multiplayer DKJP Boat
 dd MenuEntry8
 dd MenuEntry8Setting1, MenuEntry8Setting2, 0x00000000
 
-dd 0x00000002 // Multiplayer DKJP Boat
+dd 0x00000002 // Versus Bomb Karts
 dd MenuEntry9
 dd MenuEntry9Setting1, MenuEntry9Setting2, 0x00000000
 
-dd 0x00000002 // Versus Bomb Karts
+dd 0x00000002 // Versus Tracks
 dd MenuEntry10
 dd MenuEntry10Setting1, MenuEntry10Setting2, 0x00000000
 
-dd 0x00000002 // Versus Tracks
+dd 0x00000002 // Versus Timer
 dd MenuEntry11
 dd MenuEntry11Setting1, MenuEntry11Setting2, 0x00000000
 
-dd 0x00000002 // Versus Timer
-dd MenuEntry12
-dd MenuEntry12Setting1, MenuEntry12Setting2, 0x00000000
-
 dd 0x00000003 // Gold Mushroom
-dd MenuEntry13
-dd MenuEntry13Setting1, MenuEntry13Setting2, MenuEntry13Setting3, 0x00000000
+dd MenuEntry12
+dd MenuEntry12Setting1, MenuEntry12Setting2, MenuEntry12Setting3, 0x00000000
 
 dd 0x00000009 // Items
-dd MenuEntry14
-dd MenuEntry14Setting1, MenuEntry14Setting2, MenuEntry14Setting3, MenuEntry14Setting4
-dd MenuEntry14Setting5, MenuEntry14Setting6, MenuEntry14Setting7, MenuEntry14Setting8
-dd MenuEntry14Setting9, 0x00000000
+dd MenuEntry13
+dd MenuEntry13Setting1, MenuEntry13Setting2, MenuEntry13Setting3, MenuEntry13Setting4
+dd MenuEntry13Setting5, MenuEntry13Setting6, MenuEntry13Setting7, MenuEntry13Setting8
+dd MenuEntry13Setting9, 0x00000000
 
 dd 0x00000002 // Versus Scores
-dd MenuEntry15
-dd MenuEntry15Setting1, MenuEntry15Setting2, 0x00000000
+dd MenuEntry14
+dd MenuEntry14Setting1, MenuEntry14Setting2, 0x00000000
 
 dd 0x00000002 // Polling Rate Fix
-dd MenuEntry16
-dd MenuEntry16Setting1, MenuEntry16Setting2, 0x00000000
+dd MenuEntry15
+dd MenuEntry15Setting1, MenuEntry15Setting2, 0x00000000
 
 dd 0x00000000, 0x00000000
 
@@ -159,124 +154,117 @@ MenuEntry2Setting3:
 Asciiz("60 fps")
 
 MenuEntry3:
-Asciiz("lag fix")
+Asciiz("tracks")
 MenuEntry3Setting1:
 Asciiz("default")
 MenuEntry3Setting2:
-Asciiz("enabled")
+Asciiz("random")
 
 MenuEntry4:
-Asciiz("tracks")
+Asciiz("widescreen")
 MenuEntry4Setting1:
 Asciiz("default")
 MenuEntry4Setting2:
-Asciiz("random")
+Asciiz("enabled")
 
 MenuEntry5:
-Asciiz("widescreen")
+Asciiz("trophies")
 MenuEntry5Setting1:
 Asciiz("default")
 MenuEntry5Setting2:
-Asciiz("enabled")
+Asciiz("skip")
 
 MenuEntry6:
-Asciiz("trophies")
+Asciiz("mp music")
 MenuEntry6Setting1:
 Asciiz("default")
 MenuEntry6Setting2:
-Asciiz("skip")
+Asciiz("enabled")
 
 MenuEntry7:
-Asciiz("mp music")
+Asciiz("mp train")
 MenuEntry7Setting1:
 Asciiz("default")
 MenuEntry7Setting2:
-Asciiz("enabled")
+Asciiz("full")
 
 MenuEntry8:
-Asciiz("mp train")
+Asciiz("mp boat")
 MenuEntry8Setting1:
 Asciiz("default")
 MenuEntry8Setting2:
-Asciiz("full")
+Asciiz("enabled")
 
 MenuEntry9:
-Asciiz("mp boat")
+Asciiz("vs bombs")
 MenuEntry9Setting1:
 Asciiz("default")
 MenuEntry9Setting2:
-Asciiz("enabled")
+Asciiz("disabled")
 
 MenuEntry10:
-Asciiz("vs bombs")
+Asciiz("vs tracks")
 MenuEntry10Setting1:
 Asciiz("default")
 MenuEntry10Setting2:
-Asciiz("disabled")
+Asciiz("all cups")
 
 MenuEntry11:
-Asciiz("vs tracks")
+Asciiz("vs timer")
 MenuEntry11Setting1:
 Asciiz("default")
 MenuEntry11Setting2:
-Asciiz("all cups")
+Asciiz("enabled")
 
 MenuEntry12:
-Asciiz("vs 2p timer")
+Asciiz("gold shroom")
 MenuEntry12Setting1:
 Asciiz("default")
 MenuEntry12Setting2:
-Asciiz("enabled")
+Asciiz("feather small")
+MenuEntry12Setting3:
+Asciiz("feather big")
 
 MenuEntry13:
-Asciiz("gold shroom")
+Asciiz("items")
 MenuEntry13Setting1:
 Asciiz("default")
 MenuEntry13Setting2:
-Asciiz("feather small")
+Asciiz("player 1")
 MenuEntry13Setting3:
-Asciiz("feather big")
+Asciiz("player 2")
+MenuEntry13Setting4:
+Asciiz("player 3")
+MenuEntry13Setting5:
+Asciiz("player 4")
+MenuEntry13Setting6:
+Asciiz("player 5")
+MenuEntry13Setting7:
+Asciiz("player 6")
+MenuEntry13Setting8:
+Asciiz("player 7")
+MenuEntry13Setting9:
+Asciiz("player 8")
 
 MenuEntry14:
-Asciiz("items")
+Asciiz("vs scores")
 MenuEntry14Setting1:
 Asciiz("default")
 MenuEntry14Setting2:
-Asciiz("player 1")
-MenuEntry14Setting3:
-Asciiz("player 2")
-MenuEntry14Setting4:
-Asciiz("player 3")
-MenuEntry14Setting5:
-Asciiz("player 4")
-MenuEntry14Setting6:
-Asciiz("player 5")
-MenuEntry14Setting7:
-Asciiz("player 6")
-MenuEntry14Setting8:
-Asciiz("player 7")
-MenuEntry14Setting9:
-Asciiz("player 8")
+Asciiz("enabled")
 
 MenuEntry15:
-Asciiz("vs scores")
+Asciiz("polling")
 MenuEntry15Setting1:
 Asciiz("default")
 MenuEntry15Setting2:
-Asciiz("enabled")
-
-MenuEntry16:
-Asciiz("polling")
-MenuEntry16Setting1:
-Asciiz("default")
-MenuEntry16Setting2:
 Asciiz("30hz")
 
 TitleString:
 Asciiz("abitalive  weatherton  abney  sully")
 
 NetplayString:
-Asciiz("fray+veliz emulator/console build")
+Asciiz("   fray's emulator/console build   ")
 
 while (pc() % 0x4) { // Align
   db 0x00
