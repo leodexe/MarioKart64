@@ -11,7 +11,7 @@ insert "..\LIB\Mario Kart 64 (U) [!].z64"
 
 // change ROM name
 origin  0x20
-db  "MK64 NETPLAY"
+db  "MK64 HACK"
 fill 0x34 - origin(), 0x20
 
 constant ModeSelection(0x800DC53C)
@@ -619,7 +619,7 @@ scope Scaling60FpsFix2: { // Available registers: t3, t1
 }
 
 scope PollingFix: {
-  LuiLb(t0, Options+16)
+  LuiLb(t0, Options+15)
   Disabled:
     OriBne(t0, 0x01, at, Enabled) // If option disabled
     b End
@@ -657,7 +657,7 @@ scope PollingFix: {
 
 // Random Tracks
 scope RandomTracks: {
-  LuiLb(t0, Options+4)
+  LuiLb(t0, Options+3)
   OriBeq(t0, 0x01, t1, End) // Skip if option disabled
   LuiLw(t0, ModeSelection) // Determine the current mode
   Versus:
@@ -685,7 +685,7 @@ scope RandomTracks: {
 
 // Widescreen
 scope Widescreen: {
-  LuiLb(t0, Options+5)
+  LuiLb(t0, Options+4)
   Disabled:
     OriBne(t0, 0x01, t1, Enabled) // If option disabled
     LuiLw(a3, 0x80150148) // Original instruction
@@ -714,7 +714,7 @@ scope Widescreen: {
 
 // Skip Trophy Ceremony
 scope SkipTrophy: {
-  LuiLb(t0, Options+6)
+  LuiLb(t0, Options+5)
   Disabled:
     OriBne(t0, 0x01, t1, Enabled) // If option disabled
     addiu t7, r0, 0x05 // Original instruction
@@ -730,7 +730,7 @@ scope SkipTrophy: {
 
 // Multiplayer Music
 scope MultiplayerMusic: {
-  LuiLb(t0, Options+7)
+  LuiLb(t0, Options+6)
   Disabled:
     OriBne(t0, 0x01, t1, Enabled) // If option disabled
     LuiLw(t6, 0x800DC530) // Original instructions
@@ -745,7 +745,7 @@ scope MultiplayerMusic: {
 }
 
 scope MultiplayerMusicL: { // Available registers: t0, at
-  LuiLb(t0, Options+7)
+  LuiLb(t0, Options+6)
   Disabled:
     OriBne(t0, 0x01, at, Enabled) // If option disabled
     LuiLw(t1, 0x800DC52C) // Original instructions
@@ -761,7 +761,7 @@ scope MultiplayerMusicL: { // Available registers: t0, at
 
 // Multiplayer KD Train
 scope MultiplayerTrain: { // Available registers: t5, a2
-  LuiLb(t5, Options+8)
+  LuiLb(t5, Options+7)
   Disabled:
     OriBne(t5, 0x01, a2, Enabled) // If option disabled
     LuiLw(v0, 0x800DC530) // Original instructions
@@ -777,7 +777,7 @@ scope MultiplayerTrain: { // Available registers: t5, a2
 
 // Multiplayer DKJP Boat
 scope MultiplayerBoat: { // Available registers: at, a0
-  LuiLb(at, Options+9)
+  LuiLb(at, Options+8)
   Disabled:
     OriBne(at, 0x01, a0, Enabled) // If option disabled
     lb t7, 0 (t2) // Original instruction
@@ -793,7 +793,7 @@ scope MultiplayerBoat: { // Available registers: at, a0
 
 // Versus Bomb Karts
 scope VersusBomb: { // Available registers: t5, t6
-  LuiLb(t5, Options+10)
+  LuiLb(t5, Options+9)
   Enabled:
     OriBne(t5, 0x01, t6, Disabled) // If option enabled
     addiu at, r0, 0x0002 // Original instruction
@@ -813,7 +813,7 @@ scope VersusAllCups: { // Available registers: all
   sw ra, 0x14 (sp)
   jal 0x80290388 // Original instruction
   nop
-  LuiLb(t0, Options+11)
+  LuiLb(t0, Options+10)
   OriBeq(t0, 0x01, t1, End) // Skip if option disabled
   LuiLw(t0, ModeSelection)
   OriBne(t0, 0x02, t1, End) // Skip if mode != Versus
@@ -845,7 +845,7 @@ scope VersusAllCups: { // Available registers: all
 
 // Versus Timer
 scope VersusTimer: { // Available registers: all
-  LuiLb(t0, Options+12)
+  LuiLb(t0, Options+11)
   Disabled:
     OriBne(t0, 0x01, t1, Enabled) // If option disabled
     LuiLw(v0, ModeSelection) // Original instructions
@@ -870,7 +870,7 @@ scope VersusTimer: { // Available registers: all
 // Available registers: all except t7
 // Returns: t8
 scope GoldMushroom: {
-  LuiLb(t0, Options+13)
+  LuiLb(t0, Options+12)
   Disabled:
     OriBne(t0, 0x01, t1, FeatherSmall) // If option disabled
     ori t8, t7, 0x0200 // Original instruction
@@ -897,7 +897,7 @@ scope GoldMushroom: {
 scope PlayerItems: {
   addiu sp, -0x18
   sw ra, 0x14 (sp)
-  LuiLb(t0, Options+14)
+  LuiLb(t0, Options+13)
   OriBeq(t0, 0x01, t1, End) // Skip if option disabled
   Enabled:
     SltiBeq(t0, 0x0A, t1, End) // If option enabled
@@ -943,7 +943,7 @@ scope VersusScores: {
   sw a2, 0x08 (sp)
   jal 0x800A6E94 // Original instruction
   nop
-  LuiLb(t0, Options+15)
+  LuiLb(t0, Options+14)
   OriBeq(t0, 0x01, t1, End) // Skip if option disabled
   Enabled:
     ori a0, r0, 0x03 // Color = yellow
@@ -1036,7 +1036,7 @@ scope IntToAscii: {
 // Available registers: all
 // Returns: s2
 scope VersusAllCupsMenu: {
-  LuiLb(t0, Options+11)
+  LuiLb(t0, Options+10)
   Enabled:
     OriBne(t0, 0x02, t1, Disabled) // If option enabled
     LuiLw(t0, ModeSelection)
@@ -1096,7 +1096,7 @@ scope VersusAllCupsMenu: {
 // Runs when an option is selected on the versus and battle results screens
 // Available registers: all
 scope VersusAllCupsMenu2: {
-  LuiLb(t0, Options+11)
+  LuiLb(t0, Options+10)
   Enabled:
     OriBne(t0, 0x02, t1, Disabled) // If option enabled
     LuiLw(t0, ModeSelection)
