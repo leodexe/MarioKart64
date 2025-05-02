@@ -11,7 +11,7 @@ insert "..\LIB\Mario Kart 64 (U) [!].z64"
 
 // change ROM name
 origin  0x20
-db  "MK64 HACK"
+db  "MK64 CONSOLE"
 fill 0x34 - origin(), 0x20
 
 constant ModeSelection(0x800DC53C)
@@ -58,7 +58,7 @@ scope Init: {
     Default:
       la t0, Options
       ori t1, r0, 0x02
-      sb t1, 1 (t0) // Character Stats
+      sb t1, 5 (t0) // Trophies
       sb t1, 6 (t0) // Multiplayer Music
       sb t1, 10 (t0) // Versus Tracks
       sb t1, 14 (t0) // Versus Scores
@@ -77,9 +77,10 @@ dd 0x00000002 // Character Stats
 dd MenuEntry1
 dd MenuEntry1Setting1, MenuEntry1Setting2, 0x00000000
 
-dd 0x00000003 // Scaling
+dd 0x00000005 // Scaling
 dd MenuEntry2
-dd MenuEntry2Setting1, MenuEntry2Setting2, MenuEntry2Setting3, 0x00000000
+dd MenuEntry2Setting1, MenuEntry2Setting2, MenuEntry2Setting3, MenuEntry2Setting4
+dd MenuEntry2Setting5, 0x00000000
 
 dd 0x00000002 // Tracks
 dd MenuEntry3
@@ -121,11 +122,11 @@ dd 0x00000003 // Gold Mushroom
 dd MenuEntry12
 dd MenuEntry12Setting1, MenuEntry12Setting2, MenuEntry12Setting3, 0x00000000
 
-dd 0x00000009 // Items
+dd 0x0000000A // Items
 dd MenuEntry13
 dd MenuEntry13Setting1, MenuEntry13Setting2, MenuEntry13Setting3, MenuEntry13Setting4
 dd MenuEntry13Setting5, MenuEntry13Setting6, MenuEntry13Setting7, MenuEntry13Setting8
-dd MenuEntry13Setting9, 0x00000000
+dd MenuEntry13Setting9, MenuEntry13SettingA, 0x00000000
 
 dd 0x00000002 // Versus Scores
 dd MenuEntry14
@@ -149,8 +150,12 @@ Asciiz("scaling")
 MenuEntry2Setting1:
 Asciiz("default")
 MenuEntry2Setting2:
-Asciiz("30 fps")
+Asciiz("15 fps")
 MenuEntry2Setting3:
+Asciiz("20 fps")
+MenuEntry2Setting4:
+Asciiz("30 fps")
+MenuEntry2Setting5:
 Asciiz("60 fps")
 
 MenuEntry3:
@@ -230,20 +235,22 @@ Asciiz("items")
 MenuEntry13Setting1:
 Asciiz("default")
 MenuEntry13Setting2:
-Asciiz("player 1")
+Asciiz("disabled")
 MenuEntry13Setting3:
-Asciiz("player 2")
+Asciiz("player 1")
 MenuEntry13Setting4:
-Asciiz("player 3")
+Asciiz("player 2")
 MenuEntry13Setting5:
-Asciiz("player 4")
+Asciiz("player 3")
 MenuEntry13Setting6:
-Asciiz("player 5")
+Asciiz("player 4")
 MenuEntry13Setting7:
-Asciiz("player 6")
+Asciiz("player 5")
 MenuEntry13Setting8:
-Asciiz("player 7")
+Asciiz("player 6")
 MenuEntry13Setting9:
+Asciiz("player 7")
+MenuEntry13SettingA:
 Asciiz("player 8")
 
 MenuEntry14:
@@ -263,7 +270,7 @@ Asciiz("30hz")
 TitleString:
 Asciiz("abitalive  weatherton  abney  sully")
 
-NetplayString:
+ConsoleString:
 Asciiz("   fray's emulator/console build   ")
 
 while (pc() % 0x4) { // Align
@@ -294,7 +301,7 @@ Title:
   nop
   ori a0, r0, 0x00
   ori a1, r0, 0x08
-  la a2, NetplayString
+  la a2, ConsoleString
   jal DebugPrintStringCoord
   nop
 la t0, MenuStrings // Array start
@@ -496,17 +503,27 @@ scope CharacterStats: {
 scope ScalingFix1p: { // Available registers: t5, at
   LuiLb(t5, Options+2)
   Disabled:
-    OriBne(t5, 0x01, at, Fps30) // If option disabled
+    OriBne(t5, 0x01, at, Fps15) // If option disabled
     LuiLw(t7, 0x80150114) // Original instructions
     b End
     nop
+  Fps15:
+    OriBne(t5, 0x02, at, Fps20) // Else if option set to 20 fps
+    ori t7, r0, 0x04 // Return 4
+    b End
+    nop
+  Fps20:
+    OriBne(t5, 0x03, at, Fps30) // Else if option set to 30 fps
+    ori t7, r0, 0x03 // Return 3
+    b End
+    nop
   Fps30:
-    OriBne(t5, 0x02, at, Fps60) // Else if option set to 30 fps
+    OriBne(t5, 0x04, at, Fps60) // Else if option set to 60 fps
     ori t7, r0, 0x02 // Return 2
     b End
     nop
   Fps60:
-    OriBne(t5, 0x03, at, End) // Else if option set to 60 fps
+    OriBne(t5, 0x05, at, End) // Else if option NOT set to 60 fps
     ori t7, r0, 0x01 // Return 1
   End:
     jr ra
@@ -516,17 +533,27 @@ scope ScalingFix1p: { // Available registers: t5, at
 scope ScalingFix2p: { // Available registers: t8, at
   LuiLb(t8, Options+2)
   Disabled:
-    OriBne(t8, 0x01, at, Fps30) // If option disabled
+    OriBne(t8, 0x01, at, Fps15) // If option disabled
     LuiLw(t1, 0x80150114) // Original instructions
     b End
     nop
+  Fps15:
+    OriBne(t8, 0x02, at, Fps20) // Else if option set to 20 fps
+    ori t1, r0, 0x04 // Return 4
+    b End
+    nop
+  Fps20:
+    OriBne(t8, 0x03, at, Fps30) // Else if option set to 30 fps
+    ori t1, r0, 0x03 // Return 3
+    b End
+    nop
   Fps30:
-    OriBne(t8, 0x02, at, Fps60) // Else if option set to 30 fps
+    OriBne(t8, 0x04, at, Fps60) // Else if option set to 60 fps
     ori t1, r0, 0x02 // Return 2
     b End
     nop
   Fps60:
-    OriBne(t8, 0x03, at, End) // Else if option set to 60 fps
+    OriBne(t8, 0x05, at, End) // Else if option NOT set to 60 fps
     ori t1, r0, 0x01 // Return 1
   End:
     jr ra
@@ -536,17 +563,27 @@ scope ScalingFix2p: { // Available registers: t8, at
 scope ScalingFix3p: { // Available registers: t9, at
   LuiLb(t9, Options+2)
   Disabled:
-    OriBne(t9, 0x01, at, Fps30) // If option disabled
+    OriBne(t9, 0x01, at, Fps15) // If option disabled
     LuiLw(t2, 0x80150114) // Original instructions
     b End
     nop
+  Fps15:
+    OriBne(t9, 0x02, at, Fps20) // Else if option set to 20 fps
+    ori t2, r0, 0x04 // Return 4
+    b End
+    nop
+  Fps20:
+    OriBne(t9, 0x03, at, Fps30) // Else if option set to 30 fps
+    ori t2, r0, 0x03 // Return 3
+    b End
+    nop
   Fps30:
-    OriBne(t9, 0x02, at, Fps60) // Else if option set to 30 fps
+    OriBne(t9, 0x04, at, Fps60) // Else if option set to 60 fps
     ori t2, r0, 0x02 // Return 2
     b End
     nop
   Fps60:
-    OriBne(t9, 0x03, at, End) // Else if option set to 60 fps
+    OriBne(t9, 0x05, at, End) // Else if option NOT set to 60 fps
     ori t2, r0, 0x01 // Return 1
   End:
     jr ra
@@ -556,17 +593,27 @@ scope ScalingFix3p: { // Available registers: t9, at
 scope ScalingFixPost: { // Available registers: t7, at
   LuiLb(t7, Options+2)
   Disabled:
-    OriBne(t7, 0x01, at, Fps30) // If option disabled
+    OriBne(t7, 0x01, at, Fps15) // If option disabled
     LuiLw(t9, 0x80150114) // Original instructions
     b End
     nop
+  Fps15:
+    OriBne(t7, 0x02, at, Fps20) // Else if option set to 20 fps
+    ori t9, r0, 0x04 // Return 4
+    b End
+    nop
+  Fps20:
+    OriBne(t7, 0x03, at, Fps30) // Else if option set to 30 fps
+    ori t9, r0, 0x03 // Return 3
+    b End
+    nop
   Fps30:
-    OriBne(t7, 0x02, at, Fps60) // Else if option set to 30 fps
+    OriBne(t7, 0x04, at, Fps60) // Else if option set to 60 fps
     ori t9, r0, 0x02 // Return 2
     b End
     nop
   Fps60:
-    OriBne(t7, 0x03, at, End) // Else if option set to 60 fps
+    OriBne(t7, 0x05, at, End) // Else if option NOT set to 60 fps
     ori t9, r0, 0x01 // Return 1
   End:
     jr ra
@@ -578,17 +625,27 @@ scope Scaling60FpsFix1: { // Available registers: t6, at
   sw ra, 0x14 (sp)
   LuiLb(t6, Options+2)
   Disabled:
-    OriBne(t6, 0x01, at, Fps30) // If option disabled
+    OriBne(t6, 0x01, at, Fps15) // If option disabled
+    addiu a2, r0, 0x0001 // Original instruction
+    b End
+    nop
+  Fps15:
+    OriBne(t6, 0x02, at, Fps20) // Else if option set to 20 fps
+    addiu a2, r0, 0x0001 // Original instruction
+    b End
+    nop
+  Fps20:
+    OriBne(t6, 0x03, at, Fps30) // Else if option set to 30 fps
     addiu a2, r0, 0x0001 // Original instruction
     b End
     nop
   Fps30:
-    OriBne(t6, 0x02, at, Fps60) // Else if option set to 30 fps
+    OriBne(t6, 0x04, at, Fps60) // Else if option set to 60 fps
     addiu a2, r0, 0x0001 // Original instruction
     b End
     nop
   Fps60:
-    OriBne(t6, 0x03, at, End) // Else if option set to 60 fps
+    OriBne(t6, 0x05, at, End) // Else if option NOT set to 60 fps
     or a2, r0, r0 // Return 0
   End:
     jal 0x800CD750 // Original instruction
@@ -601,18 +658,28 @@ scope Scaling60FpsFix1: { // Available registers: t6, at
 scope Scaling60FpsFix2: { // Available registers: t3, t1
   LuiLb(t3, Options+2)
   Disabled:
-    OriBne(t3, 0x01, t1, Fps30) // If option disabled
+    OriBne(t3, 0x01, t1, Fps15) // If option disabled
+    addiu t1, r0, 0x0002 // Original instruction
+    b End
+    nop
+  Fps15:
+    OriBne(t3, 0x02, t1, Fps20) // Else if option set to 20 fps
+    addiu t1, r0, 0x0002 // Original instruction
+    b End
+    nop
+  Fps20:
+    OriBne(t3, 0x03, t1, Fps30) // Else if option set to 30 fps
     addiu t1, r0, 0x0002 // Original instruction
     b End
     nop
   Fps30:
-    OriBne(t3, 0x02, t1, Fps60) // Else if option set to 30 fps
+    OriBne(t3, 0x04, t1, Fps60) // Else if option set to 60 fps
     addiu t1, r0, 0x0002 // Original instruction
     b End
     nop
   Fps60:
-    OriBne(t3, 0x03, t1, End) // Else if option set to 60 fps
-    addiu t1, r0, 0x0001 // Return 1
+    OriBne(t3, 0x05, t1, End) // Else if option NOT set to 60 fps
+     addiu t1, r0, 0x0001 // Return 1
   End:
     jr ra
     nop
@@ -632,11 +699,11 @@ scope PollingFix: {
         b End
         nop
     Fps30:
-        OriBne(t0, 0x02, at, Fps60) // Else if scaling set to 30 fps
+        OriBne(t0, 0x04, at, Fps60) // Else if scaling set to 30 fps
         b End
         nop
     Fps60:
-        OriBne(t0, 0x03, at, End) // Else if scaling set to 60 fps
+        OriBne(t0, 0x05, at, End) // Else if scaling set to 60 fps
         li t0, Flag
         lbu at, 0x0003(t0)
         xori at, at, 0x0001
@@ -653,7 +720,6 @@ scope PollingFix: {
   Flag:
   fill 0x4
 }
-
 
 // Random Tracks
 scope RandomTracks: {
@@ -890,7 +956,7 @@ scope GoldMushroom: {
     sw t8, 0x000C (a0) // Store new state
 }
 
-// Player Items
+// Player Items, Options: 1=Default, 2=Disabled, 3-A=Players 1-8
 // Runs once when players receive an item
 // Available registers: all
 // Returns: a0
@@ -898,10 +964,20 @@ scope PlayerItems: {
   addiu sp, -0x18
   sw ra, 0x14 (sp)
   LuiLb(t0, Options+13)
-  OriBeq(t0, 0x01, t1, End) // Skip if option disabled
-  Enabled:
-    SltiBeq(t0, 0x0A, t1, End) // If option enabled
-    addiu a0, t0, -0x02 // Set player
+  Disabled:
+    OriBeq(t0, 0x02, t1, NoItems)
+  NoItems: // TODO: Kill Blue Shell Item Boxes in LR & KTB
+    OriBeq(t0, 0x01, t1, End)
+    OriBne(t0, 0x02, t1, Items)
+// addiu sp, 0xffe8
+// sw ra, 0x14 (sp)
+    jr ra
+    addu v0, r0, r0 // v0 = Pointer to first digit in buffer
+  Items:
+    OriBeq(t0, 0x01, t1, End)
+    OriBeq(t0, 0x02, t1, End)
+    SltiBeq(t0, 0x0B, t1, End)
+    addiu a0, t0, -0x03 // Set player
   End:
     jal 0x8007ADA8 // Original instruction
     nop
@@ -1330,6 +1406,10 @@ j GoldMushroom
 origin 0x07BB60
 base 0x8007AF60
 jal PlayerItems
+
+// NoItems
+origin 0x861C0 // This origin lacks a base, but code still works tho.
+// jal NoItems // This should remain commented unless stated otherwise.
 
 // Character Stats
 origin 0x003314
