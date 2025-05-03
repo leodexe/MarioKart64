@@ -1,23 +1,23 @@
 # Mario Kart 64 Multiplayer ROM Hack
 ### Fray's Emulator/Console Build (edited by leodexe)
-This is a fork of abitalive's Mario Kart 64 Multiplayer Hack which was improved by Fray for better multiplayer experience on emulator and netplay. However there is a conflicting option that prevents MK64 Fray's mod to work on console, so I sacrificed netplay functionality for the sake of enabling console compatibility. If you are looking for Fray's build this will work for offline emulator/console gameplay, but not for netplay.
+This is a fork of abitalive's Mario Kart 64 Multiplayer Hack which was improved by Fray for better multiplayer experience on emulator and netplay. However there is a conflicting option (LagFix) that prevents MK64 Fray's mod to work on console, so I removed LagFix functionality for the sake of enabling console compatibility. If you are looking for Fray's build this will work for offline emulator/console gameplay, but not for netplay.
 
-Este es un fork del hack de Mario Kart 64 Multiplayer de abitalive, que fue mejorado por Fray para mejor experiencia multijugador en netplay y emulador. Sin embargo hay un conflicto con una opción que no permite que el hack se pueda jugar en consola, por lo que sacrifiqué la funcionalidad de netplay para hacer que este hack sea compatible con la consola. Si estás buscando la versión de MK64 Fray's mod para jugar online, esta sirve para jugar sin conexión en emulador y consola, pero no para netplay.
+Este es un fork del hack de Mario Kart 64 Multiplayer de abitalive, que fue mejorado por Fray para mejor experiencia multijugador en netplay y emulador. Sin embargo hay un conflicto con una opción (LagFix) que no permite que el hack se pueda jugar en consola, por lo que removí el LagFix para hacer que este hack sea compatible con la consola. Si estás buscando la versión de MK64 Fray's mod para jugar online, esta sirve para jugar sin conexión en emulador y consola, pero no para netplay.
 
 # Changes
 ## New 15FPS and 20FPS Options for SCALING
 - Added 15FPS and 20FPS options to the Scaling Selector, this is intended for use in console since emulators won't be able to emulate the proper pacing. This is useful to practice with a multiplayer 3-4 setting on single and two players.
-- Not tested on console, works on Project64 and Nemu for the time being.
+- Tested on console, fully working on Everdrive v2 chinese knockoff, also works on Project64 and Nemu.
 
 - Agregado opciones de 15FPS y 20FPS para el selector de Scaling, estas opciones están hechas para jugarse en consola, ya que los emuladores no son capaces de emular el cambio de velocidad de manera adecuada. Esto es útil si quieres practicar a la velocidad de multiplayer 3-4 en consola con 1 ó 2 jugadores.
-- No ha sido testeado en consola, funciona en Project64 y Nemu por el momento.
+- Probado en consola, funciona en la imitación china del Everdrive v2, también funciona en Project64 y Nemu.
 
 ## New "DISABLE" Option for ITEMS
 - Added "Disable" option to the Items Menu. It disables all items boxes, except one in Luigi Raceway and one in Koopa Troopa Beach that always gives Blue Shells. This does not affect Time Trial as you can still freely use the Triple Mushrooms while items are disabled. CPU players will continue to use items in Grand Prix, though. This option will also disable items in Battle Mode.
-- Untested on console, works on Project64 and Nemu for the time being.
+- Tested on console, fully working on Everdrive v2 chinese knockoff, also works on Project64 and Nemu.
 
 - Agregado opción "Disable" en el menú de Items. Esto desactiva todas las cajas de objetos, excepto una en Luigi Raceway y una en Koopa Troopa Beach que siempre dan Caparazones Azules. Esto no afecta el Time Trial ya que aun puedes usar los Triple Hongos aun con los items desactivados. Aunque Los jugadores CPU aun podrán usar items en Grand Prix. Esta opción también desactivará los items en Modo Batalla.
-- No testeado en consola, funciona en Project64 y Nemu por el momento.
+- Testeado en consola, funciona en la imitación china del Everdrive v2, también funciona en Project64 y Nemu.
 
 ## New TITLE MENU Options
 ### Lag Fix (Default / Enabled)
