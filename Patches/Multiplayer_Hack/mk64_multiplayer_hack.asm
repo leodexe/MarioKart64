@@ -976,7 +976,6 @@ scope PlayerItems: {
   Items:
     OriBeq(t0, 0x01, t1, End)
     OriBeq(t0, 0x02, t1, End)
-    SltiBeq(t0, 0x0B, t1, End)
     addiu a0, t0, -0x03 // Set player
   End:
     jal 0x8007ADA8 // Original instruction
