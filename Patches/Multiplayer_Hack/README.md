@@ -64,15 +64,16 @@ Este es un fork del hack de Mario Kart 64 Multiplayer de abitalive, que fue mejo
 - Multiplayer Music ahora está activado por defecto.
 
 # Building (Windows)
-1 Clone or download the repository.
-2 Put "Mario Kart 64 (U) [!].z64" in the LIB directory.
-3 Download and extract [these files](https://drive.google.com/file/d/0B1g_ALmgbOzxSDdWVVA4TXdwWlk/view?usp=sharing) to the Multiplayer_Hack directory.
-4 Drag and drop mk64_multiplayer_hack.asm onto asm.cmd
+1. Clone or download the repository.
+2. Put "Mario Kart 64 (U) [!].z64" in the LIB directory.
+3. Download and extract [these files](https://drive.google.com/file/d/0B1g_ALmgbOzxSDdWVVA4TXdwWlk/view?usp=sharing) to the Multiplayer_Hack directory.
+4. Drag and drop mk64_multiplayer_hack.asm onto asm.cmd
 
-1 Clona o descarga el repositorio.
-2 Pon "Mario Kart 64 (U) [!].z64" en el directorio LIB.
-3 Descarga y extrae [estos archivos](https://drive.google.com/file/d/0B1g_ALmgbOzxSDdWVVA4TXdwWlk/view?usp=sharing) dentro de la carpeta Multiplayer_Hack.
-4 Arrastra y suelta mk64_multiplayer_hack.asm hacia asm.cmd
+# Compilar (Windows) Español
+1. Clona o descarga el repositorio.
+2. Pon "Mario Kart 64 (U) [!].z64" en el directorio LIB.
+3. Descarga y extrae [estos archivos](https://drive.google.com/file/d/0B1g_ALmgbOzxSDdWVVA4TXdwWlk/view?usp=sharing) dentro de la carpeta Multiplayer_Hack.
+4. Arrastra y suelta mk64_multiplayer_hack.asm hacia asm.cmd
 
 # Acknowledgements
 - Special thanks to Fray, he's a cool dude.
