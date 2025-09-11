@@ -1,4 +1,5 @@
-// Version 1.2 beta: Lagfix removed, enable console compatibility + FPS Selector (15/20/30/60) + Item Switch (Disable Items)
+// Version 1.2 RC: Lagfix removed, enable console compatibility + FPS Selector (15/20/30/60) + Item Switch
+// Item Switch now lets you disable all Item Boxes, including those that always gives Blue Shells in LR and KTB. 
 arch n64.cpu
 endian msb
 //output "", create
@@ -495,9 +496,18 @@ scope CharacterStats: {
     jal BCopy // Copy Yoshi weight stats
     nop
   End:
-    lw ra, 0x14 (sp)
-    jr ra
-    addiu sp, 0x18
+    LuiLb(t0, Options+13)
+    Default:
+      OriBeq(t0, 0x02, t1, NoBlues)
+    NoBlues:
+      OriBne(t0, 0x02, t1, Close)
+      lui t0, 0x802A // now executes conditionally (When Items == Disabled)
+      ori t1, r0, 0x00 // now executes conditionally (Stores 0x00 into t1)
+      sb t1, 0x0C83 (t0) // now executes conditionally (writes 0x00 into RAM)
+    Close:
+      lw ra, 0x14 (sp)
+      jr ra
+      addiu sp, 0x18
 }
 
 // Scaling Fix
@@ -966,28 +976,31 @@ scope GoldMushroom: {
 }
 
 // Player Items, Options: 1=Default, 2=Disabled, 3-A=Players 1-8
-// TODO: Kill Blue Shell Item Boxes in LR Globe & KTB Ramp
 // Runs once when players receive an item
 // Available registers: all
-// Returns: a0 for Items, v0 for NoItems
+// Returns: v0 (item ID for NoItems), a0 (player ID for Items)
 scope PlayerItems: {
   addiu sp, -0x18
   sw ra, 0x14 (sp)
   LuiLb(t0, Options+13)
   Disabled:
-    OriBeq(t0, 0x01, t1, End)
-    SltiBeq(t0, 0x02, t1, NoItems)
+      OriBeq(t0, 0x01, t1, End)  // Default: Branch to End (0x01)
+      SltiBeq(t0, 0x02, t1, NoItems)  // Disabled: Branch to NoItems (0x02)
   NoItems:
     SltiBeq(t0, 0x03, t1, Items)
-    addu v0, r0, r0   // v0 = 0 (No Item, 0x00)
-    addiu sp, 0x18    // Restore stack
-    jr ra                     // Return immediately
-    nop                      // Delay slot
+    addu v0, r0, r0
+    addiu sp, 0x18
+//    lui t0, 0x802A
+//    ori t1, t1, 0x00
+//    sb t1, 0x0C3C (t0)
+//    sb t1, 0x0CC4 (t0)
+    jr ra
+    nop
   Items:
     SltiBeq(t0, 0x0B, t1, End)
-    addiu a0, t0, -0x03 // Set player
+    addiu a0, t0, -0x03
   End:
-    jal 0x8007ADA8 // Original instruction
+    jal 0x8007ADA8
     nop
     lw ra, 0x14 (sp)
     jr ra
