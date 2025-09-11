@@ -13,10 +13,10 @@ Este es un fork del hack de Mario Kart 64 Multiplayer de abitalive, que fue mejo
 - Probado en consola, funciona en la imitación china del Everdrive v2, también funciona en Project64 y Nemu.
 
 ## New "DISABLE" Option for ITEMS
-- Added "Disable" option to the Items Menu. It disables all items boxes, except one in Luigi Raceway and one in Koopa Troopa Beach that always gives Blue Shells. This does not affect Time Trial as you can still freely use the Triple Mushrooms while items are disabled. CPU players will continue to use items in Grand Prix, though. This option will also disable items in Battle Mode.
+- Added "Disable" option to the Items Menu. It disables all items boxes, even those in Luigi Raceway and Koopa Troopa Beach that always gives Blue Shells. This does not affect Time Trial as you can still freely use the Triple Mushrooms while items are disabled. CPU players will continue to use items in Grand Prix, though. This option will also disable items in Battle Mode.
 - Tested on console, fully working on Everdrive v2 chinese knockoff, also works on Project64 and Nemu.
 
-- Agregado opción "Disable" en el menú de Items. Esto desactiva todas las cajas de objetos, excepto una en Luigi Raceway y una en Koopa Troopa Beach que siempre dan Caparazones Azules. Esto no afecta el Time Trial ya que aun puedes usar los Triple Hongos aun con los items desactivados. Aunque Los jugadores CPU aun podrán usar items en Grand Prix. Esta opción también desactivará los items en Modo Batalla.
+- Agregado opción "Disable" en el menú de Items. Esto desactiva todas las cajas de objetos, incluso en Luigi Raceway y Koopa Troopa Beach que siempre dan Caparazones Azules. Esto no afecta el Time Trial ya que aun puedes usar los Triple Hongos aun con los items desactivados. Aunque Los jugadores CPU aun podrán usar items en Grand Prix. Esta opción también desactivará los items en Modo Batalla.
 - Testeado en consola, funciona en la imitación china del Everdrive v2, también funciona en Project64 y Nemu.
 
 ## New TITLE MENU Options
