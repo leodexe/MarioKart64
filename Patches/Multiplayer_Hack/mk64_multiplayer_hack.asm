@@ -1,5 +1,4 @@
-// Version 1.2 RC: Lagfix removed, enable console compatibility + FPS Selector (15/20/30/60) + Item Switch
-// Item Switch now lets you disable all Item Boxes, including those that always gives Blue Shells in LR and KTB. 
+// Version 1.2b: Lagfix removed to enable console compatibility + FPS Selector (15/20/30/60) + Disable Items + Invisible Bombs
 arch n64.cpu
 endian msb
 //output "", create
@@ -13,7 +12,7 @@ insert "..\LIB\Mario Kart 64 (U) [!].z64"
 
 // change ROM name
 origin  0x20
-db  "MK64 CONSOLE 1.2"
+db  "MK64 CONSOLE 1.2B"
 fill 0x34 - origin(), 0x20
 
 constant ModeSelection(0x800DC53C)
@@ -108,9 +107,9 @@ dd 0x00000002 // Multiplayer DKJP Boat
 dd MenuEntry8
 dd MenuEntry8Setting1, MenuEntry8Setting2, 0x00000000
 
-dd 0x00000002 // Versus Bomb Karts
+dd 0x00000003 // Versus Bomb Karts
 dd MenuEntry9
-dd MenuEntry9Setting1, MenuEntry9Setting2, 0x00000000
+dd MenuEntry9Setting1, MenuEntry9Setting2, MenuEntry9Setting3, 0x00000000
 
 dd 0x00000002 // Versus Tracks
 dd MenuEntry10
@@ -208,6 +207,8 @@ MenuEntry9Setting1:
 Asciiz("default")
 MenuEntry9Setting2:
 Asciiz("disabled")
+MenuEntry9Setting3:
+Asciiz("invisible")
 
 MenuEntry10:
 Asciiz("vs tracks")
@@ -273,7 +274,7 @@ TitleString:
 Asciiz("abitalive  weatherton  abney  sully")
 
 ConsoleString:
-Asciiz(" fray's emulator/console build 1.2 ")
+Asciiz("fray's multiplayer hack build v1.2b")
 
 while (pc() % 0x4) { // Align
   db 0x00
@@ -498,12 +499,12 @@ scope CharacterStats: {
   End:
     LuiLb(t0, Options+13)
     Default:
-      OriBeq(t0, 0x02, t1, NoBlues)
+      OriBeq(t0, 0x02, t1, NoBlues) // If option set to default
     NoBlues:
-      OriBne(t0, 0x02, t1, Close)
-      lui t0, 0x802A // now executes conditionally (When Items == Disabled)
-      ori t1, r0, 0x00 // now executes conditionally (Stores 0x00 into t1)
-      sb t1, 0x0C83 (t0) // now executes conditionally (writes 0x00 into RAM)
+      OriBne(t0, 0x02, t1, Close) // Else if option set to No Items
+      lui t0, 0x802A // (When Items == Disabled)
+      ori t1, r0, 0x00 // (Stores 0x00 into t1)
+      sb t1, 0x0C83 (t0) // (writes 0x00 into RAM)
     Close:
       lw ra, 0x14 (sp)
       jr ra
@@ -877,16 +878,25 @@ scope MultiplayerBoat: { // Available registers: at, a0
 }
 
 // Versus Bomb Karts
-scope VersusBomb: { // Available registers: t5, t6
+// Available registers: t5, t6
+scope VersusBomb: {
   LuiLb(t5, Options+9)
   Enabled:
     OriBne(t5, 0x01, t6, Disabled) // If option enabled
-    addiu at, r0, 0x0002 // Original instruction
+    addiu at, r0, 0x0002 // Original instruction (bombs enabled)
     b End
     nop
   Disabled:
-    OriBne(t5, 0x02, t6, End) // Else if option disabled
-    addiu at, r0, 0x0005 // Return 5
+    OriBne(t5, 0x02, t6, Invisible) // Else if option disabled
+    addiu at, r0, 0x0005 // Return 5 (bombs disabled)
+    b End
+    nop
+  Invisible:
+    OriBne(t5, 0x03, t6, End) // Else if option invisible
+    addiu at, r0, 0x0002 // Original instruction required for invisible bombs
+    lui t5, 0x8002
+    ori t6, r0, 0x00 // r0 is implicitly available since it's been used before.
+    sb t6, 0x0C40B (t5) // Write 0x00 to 0x8001C40B (bomb visibility flag)
   End:
     jr ra
     nop
@@ -990,10 +1000,6 @@ scope PlayerItems: {
     SltiBeq(t0, 0x03, t1, Items)
     addu v0, r0, r0
     addiu sp, 0x18
-//    lui t0, 0x802A
-//    ori t1, t1, 0x00
-//    sb t1, 0x0C3C (t0)
-//    sb t1, 0x0CC4 (t0)
     jr ra
     nop
   Items:
@@ -1399,10 +1405,11 @@ origin 0x00A458
 base 0x80009858
 jal VersusBomb
 
-origin 0x01D004
-base 0x8001C404
-jal VersusBomb
-lw  t8, 0xC53C(t8)
+// This interferes with the invisible bombs and doesn't provide any other functionality.
+// origin 0x01D004
+// base 0x8001C404
+// jal VersusBomb
+// lw  t8, 0xC53C(t8)
 
 // Versus All Cups
 origin 0x09DBA4
