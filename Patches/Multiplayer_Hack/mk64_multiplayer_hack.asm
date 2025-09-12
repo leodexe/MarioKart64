@@ -59,6 +59,7 @@ scope Init: {
     Default:
       la t0, Options
       ori t1, r0, 0x02
+      sb t1, 1 (t0) // Character Stats
       sb t1, 5 (t0) // Trophies
       sb t1, 6 (t0) // Multiplayer Music
       sb t1, 10 (t0) // Versus Tracks
