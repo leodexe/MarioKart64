@@ -885,11 +885,17 @@ scope VersusBomb: {
   Enabled:
     OriBne(t5, 0x01, t6, Disabled) // If option enabled
     addiu at, r0, 0x0002 // Original instruction (bombs enabled)
+    lui t5, 0x8002
+    ori t6, r0, 0x02 // r0 is implicitly available since it's been used before.
+    sb t6, 0x0C40B (t5) // Write 0x02 to 0x8001C40B (bomb visibility flag)
     b End
     nop
   Disabled:
     OriBne(t5, 0x02, t6, Invisible) // Else if option disabled
     addiu at, r0, 0x0005 // Return 5 (bombs disabled)
+    lui t5, 0x8002
+    ori t6, r0, 0x00 // r0 is implicitly available since it's been used before.
+    sb t6, 0x0C40B (t5) // Write 0x05 to 0x8001C40B (bomb visibility flag)
     b End
     nop
   Invisible:
