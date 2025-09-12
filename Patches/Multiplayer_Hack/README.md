@@ -27,11 +27,11 @@ Este es un fork del hack de Mario Kart 64 Multiplayer de abitalive, que fue mejo
 - Este hack reduce el lag en partidas multijugador, está hecho para usarse con emuladores, no es compatible con la consola y otros emuladores como Nemu64 y M64PlusFZ.
 - Esta opción fue removida de esta build debido a que es incompatible con la consola.
 
-### VS Bomb Karts (Default / Disabled)
-- Mini Bomb Karts can now be disabled for VS modes
+### VS Bomb Karts (Default / Disabled / Invisible)
+- Mini Bomb Karts can now be disabled for VS modes, or also set them to invisible if you want to torture yourself and others.
 - This does not affect Battle Mode Bomb Karts, so you still turn into a Bomb Kart after you lose all your balloons.
 
-- Ahora puedes desactivar las bombas en modo VS.
+- Ahora puedes desactivar las bombas en modo VS, o también puedes ponerlas invisibles si quieres torturarte a ti mismo y a los demás.
 - Esto no afecta las bombas del modo Batalla, por lo que aun te conviertes en un carro bomba después de que pierdas todos tus globos.
 
 ### Polling Rate (Default / 30Hz)
@@ -57,11 +57,10 @@ Este es un fork del hack de Mario Kart 64 Multiplayer de abitalive, que fue mejo
 - Game Pacing is back again to default, which is intended for use with non-overclocked consoles. If you are playing on emulator or have an overclocked console, select 30 or 60FPS.
 - Game Pacing vuelve a ser default, esta opción debe usarse en consolas sin overclock. Si estás jugando en emulador o tienes una consola con overclock, selecciona 30 o 60FPS.
 
-- Trophy Ceremony is back to it's default setting.
-- Trophy Ceremony vuelve a su opción por defecto.
+- Polling set to default. However, it does not have any meaningful impact on console gameplay.
+- Polling vuelve a ser default. Aunque, no tiene un impacto significativo al jugar en consola.
 
-- Multiplayer Music is now enabled by default.
-- Multiplayer Music ahora está activado por defecto.
+
 
 # Building (Windows)
 1. Clone or download the repository.
