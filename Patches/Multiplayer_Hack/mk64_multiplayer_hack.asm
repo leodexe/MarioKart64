@@ -895,7 +895,7 @@ scope VersusBomb: {
     addiu at, r0, 0x0005 // Return 5 (bombs disabled)
     lui t5, 0x8002
     ori t6, r0, 0x00 // r0 is implicitly available since it's been used before.
-    sb t6, 0x0C40B (t5) // Write 0x05 to 0x8001C40B (bomb visibility flag)
+    sb t6, 0x0C40B (t5) // Write 0x00 to 0x8001C40B (bomb visibility flag)
     b End
     nop
   Invisible:
